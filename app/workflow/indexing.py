@@ -4,7 +4,7 @@ from app.ingestion.loaders import load_documents
 from app.vectorstore.chroma_store import ChromaResearchStore
 
 
-def build_index() -> int:
+def build_index(args) -> int:
     settings = get_settings()
     # 加载文档内容
     records = load_documents(settings.docs_dir)
@@ -14,7 +14,12 @@ def build_index() -> int:
         chunk_size=settings.chunk_size,
         chunk_overlap=settings.chunk_overlap,
     )
-    store = ChromaResearchStore()
+    store = ChromaResearchStore(collection_name=args.collection)
+    if args.rebuild:
+        store.rebuild_collection(args.collection or settings.chroma_collection)
+    if args.clear:
+        store.del_collection(is_all=args.clear)
+
     # 将chunk写入向量数据库
     store.upsert_chunks(chunks)
     return len(chunks)

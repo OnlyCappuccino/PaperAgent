@@ -8,6 +8,9 @@ class Settings(BaseSettings):
     llm_base_url: str = 'http://127.0.0.1:11434/v1'
     llm_api_key: str = 'EMPTY'
     llm_model_name: str = 'qwen2.5:7b-instruct'
+
+    embedding_base_url: str = 'http://127.0.0.1:11434/v1'
+    embedding_api_key: str = 'EMPTY'
     embedding_model_name: str = 'BAAI/bge-m3'
 
     chroma_collection: str = 'research_chunks'
@@ -19,7 +22,7 @@ class Settings(BaseSettings):
     chunk_overlap: int = 120
     max_rewrite_rounds: int = 2
     request_timeout: int = 120
-
+    bm25_score_threshold: float = 0.1
 
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:

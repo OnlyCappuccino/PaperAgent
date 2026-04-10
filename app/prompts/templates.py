@@ -9,8 +9,8 @@ def format_context(chunks: list[RetrievedChunk]) -> str:
 
     lines: list[str] = []
     for idx, chunk in enumerate(chunks, start=1):
-        page_info = f"第{chunk.page}页" if chunk.page else '页码未知'
-        lines.append(f"[证据{idx}] 来源: {chunk.source} | {page_info}\n{chunk.text}")
+        page_info = f"第{chunk.metadata.get('page')}页" if chunk.metadata.get('page') else '页码未知'
+        lines.append(f"[证据{idx}] 来源: {chunk.metadata.get('source', '')} | {page_info}\n{chunk.metadata.get('text', '')}")
     return '\n\n'.join(lines)
 
 

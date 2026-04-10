@@ -96,7 +96,7 @@ data/papers/
 ### 第二步：建立索引
 
 ```bash
-python scripts/build_index.py
+python -m scripts.build_index
 ```
 
 ### 第三步：命令行提问

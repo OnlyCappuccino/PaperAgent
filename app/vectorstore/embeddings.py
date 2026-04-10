@@ -2,23 +2,25 @@ from __future__ import annotations
 
 from functools import lru_cache
 from sentence_transformers import SentenceTransformer
-
+from langchain_openai import OpenAIEmbeddings
 from app.config import get_settings
 
 
 @lru_cache(maxsize=1)
-def get_embedding_model() -> SentenceTransformer:
+def get_embedding_client() -> OpenAIEmbeddings:
     settings = get_settings()
-    return SentenceTransformer(settings.embedding_model_name)
+    return OpenAIEmbeddings(
+        model=settings.embedding_model_name,
+        openai_api_key=settings.embedding_api_key,
+        openai_api_base=settings.embedding_base_url,
+    )
 
 
 def embed_texts(texts: list[str]) -> list[list[float]]:
-    model = get_embedding_model()
-    vectors = model.encode(texts, normalize_embeddings=True)
-    return [vector.tolist() for vector in vectors]
+    if not texts:
+        return []
+    return get_embedding_client().embed_documents(texts)
 
 
 def embed_query(query: str) -> list[float]:
-    model = get_embedding_model()
-    vector = model.encode([query], normalize_embeddings=True)[0]
-    return vector.tolist()
+    return get_embedding_client().embed_query(query)

@@ -9,10 +9,10 @@ from app.vectorstore.embeddings import embed_query, embed_texts
 
 
 class ChromaResearchStore:
-    def __init__(self) -> None:
+    def __init__(self, collection_name: str = None) -> None:
         settings = get_settings()
         self.client = chromadb.PersistentClient(path=settings.chroma_dir)
-        self.collection = self.client.get_or_create_collection(name=settings.chroma_collection)
+        self.collection = self.client.get_or_create_collection(name=collection_name or settings.chroma_collection)
 
     def upsert_chunks(self, chunks: list[DocumentChunk]) -> None:
         if not chunks:
@@ -25,6 +25,8 @@ class ChromaResearchStore:
                 'source': chunk.source,
                 'page': chunk.page,
                 'chunk_index': chunk.chunk_index,
+                'doc_name': chunk.doc_name,
+                'section': chunk.section,
             }
             for chunk in chunks
         ]
@@ -37,13 +39,13 @@ class ChromaResearchStore:
             embeddings=embeddings,
         )
 
-    def search(self, query: str, top_k: int) -> list[RetrievedChunk]:
+    def search(self, query: str, k: int = 60) -> list[RetrievedChunk]:
         result = self.collection.query(
             query_embeddings=[embed_query(query)],
-            n_results=top_k,
+            n_results=k,
             include=['documents', 'metadatas', 'distances'],
         )
-
+        
         documents = result.get('documents', [[]])[0]
         metadatas = result.get('metadatas', [[]])[0]
         distances = result.get('distances', [[]])[0]
@@ -54,10 +56,39 @@ class ChromaResearchStore:
             outputs.append(
                 RetrievedChunk(
                     chunk_id=chunk_id,
-                    source=meta.get('source', ''),
-                    page=meta.get('page'),
-                    text=doc,
                     score=float(distance),
+                    metadata={
+                        'page': meta.get('page'),
+                        'text': doc,
+                        'source': meta.get('source', ''),
+                        'doc_name': meta.get("doc_name", ""),
+                        'section': meta.get("section", ""),
+                    },
                 )
             )
         return outputs
+    
+    def del_collection(self, collection_name: str | None = None, is_all: bool | None = False) -> None:
+        if is_all:
+            for collection in self.client.list_collections():
+                if collection.name == self.collection.name:
+                    continue
+                self.client.delete_collection(collection.name)
+        else:
+            self.client.delete_collection(collection_name)
+    
+    def rebuild_collection(self, collection_name: str) -> None:
+        self.client.delete_collection(name=collection_name)
+        self.collection = self.client.get_or_create_collection(
+            name=collection_name,
+            metadata={'hnsw:space': 'cosine'}
+        )
+    
+    def switch_collection(self, collection_name: str) -> None:
+        self.collection = self.client.get_or_create_collection(
+            name=collection_name,
+            metadata={'hnsw:space': 'cosine'}
+        )
+    
+    def all_collections(self) -> list[str]:
+        return [collection.name for collection in self.client.list_collections()]

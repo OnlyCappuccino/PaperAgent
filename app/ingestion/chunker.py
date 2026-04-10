@@ -1,4 +1,5 @@
 from __future__ import annotations
+from pathlib import Path
 
 from app.schemas.documents import DocumentChunk
 
@@ -42,6 +43,8 @@ def build_chunks(records: list[dict], chunk_size: int, chunk_overlap: int) -> li
                     text=part,
                     page=record.get('page'),
                     chunk_index=idx,
+                    doc_name = Path(record['source']).stem,
+                    section = "",
                 )
             )
     return results
