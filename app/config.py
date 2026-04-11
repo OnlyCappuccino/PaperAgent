@@ -13,6 +13,8 @@ class Settings(BaseSettings):
     embedding_api_key: str = 'EMPTY'
     embedding_model_name: str = 'BAAI/bge-m3'
 
+    reranker_model: str = 'BAAI/bge-reranker-base'
+
     chroma_collection: str = 'research_chunks'
     chroma_dir: str = './data/chroma'
     docs_dir: str = './data/papers'
