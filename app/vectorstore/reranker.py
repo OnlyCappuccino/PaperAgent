@@ -55,7 +55,6 @@ class Reranker:
                 metadata=hit.metadata
             )
             result.append(hit_chunk)
-        result.sort(key=lambda x: x.score, reverse=True)
         return result
 
 

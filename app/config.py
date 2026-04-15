@@ -26,6 +26,10 @@ class Settings(BaseSettings):
     request_timeout: int = 120
     bm25_score_threshold: float = 0.1
 
+    min_retrieval_hits_threshold: int = 3
+    rerank_margin_threshold: float = 0.05
+    dense_bm25_overlap_threshold: int = 3
+    rerank_top1_score_threshold: float = 0.3
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:
     return Settings()

@@ -10,7 +10,10 @@ def format_context(chunks: list[RetrievedChunk]) -> str:
     lines: list[str] = []
     for idx, chunk in enumerate(chunks, start=1):
         page_info = f"第{chunk.metadata.get('page')}页" if chunk.metadata.get('page') else '页码未知'
-        lines.append(f"[证据{idx}] 来源: {chunk.metadata.get('source', '')} | {page_info}\n{chunk.metadata.get('text', '')}")
+        lines.append(
+            f"[证据{idx}] chunk_id=[{chunk.chunk_id}] | 来源: {chunk.metadata.get('source', '')} | {page_info}\n"
+            f"{chunk.metadata.get('text', '')}"
+        )
     return '\n\n'.join(lines)
 
 
@@ -24,6 +27,8 @@ def summarizer_messages(user_query: str, chunks: list[RetrievedChunk], rewrite_h
                 '只能根据提供的证据回答，不允许编造。'
                 '请尽量输出结构化内容：背景、方法、结果、局限、结论。'
                 '若证据不足，请明确说明证据不足。'
+                '回答末尾必须包含“引用证据”小节。'
+                '引用证据小节中每行只允许输出一个 chunk_id，格式必须是 - [chunk_id]。'
             ),
         },
         {
@@ -32,7 +37,10 @@ def summarizer_messages(user_query: str, chunks: list[RetrievedChunk], rewrite_h
                 f'用户问题：{user_query}\n\n'
                 f'证据片段：\n{format_context(chunks)}\n'
                 f'{hint_text}\n\n'
-                '请基于证据作答，并在末尾附一个“引用证据”小节，列出你使用了哪些证据编号。'
+                '请基于证据作答，并严格使用下面的结尾格式：\n'
+                '引用证据：\n'
+                '- [chunk_id_1]\n'
+                '- [chunk_id_2]'
             ),
         },
     ]
