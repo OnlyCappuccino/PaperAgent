@@ -1,4 +1,5 @@
 from contextlib import asynccontextmanager
+from uuid import uuid4
 
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
@@ -6,7 +7,7 @@ from pydantic import BaseModel
 from app.core.citations import build_evidence_map
 from app.workflow.engine import ResearchWorkflow
 from app.workflow.indexing import build_index
-from app.schemas.state import ResearchState
+from app.schemas.state import AskRequest, IndexRequest, ResearchState
 
 workflow : ResearchWorkflow | None = None
 @asynccontextmanager
@@ -25,13 +26,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(title='Local Multi-Agent Research Assistant', lifespan=lifespan)
 
 
-class AskRequest(BaseModel):
-    query: str
 
-class IndexRequest(BaseModel):
-    collection: str | None = None
-    clear: bool = False
-    rebuild: bool = False
 
 
 
@@ -73,6 +68,7 @@ def ask_question(request: AskRequest) -> dict:
             for chunk_id, citation in build_evidence_map(state.retrieved_chunks).items()
         }
         return {
+            "session_id": sid,
             'status': status,
             'query': state.user_query,
             'answer': state.draft_answer if status == 'ok' else state.failure_reason,
@@ -86,9 +82,9 @@ def ask_question(request: AskRequest) -> dict:
             'invalid_citation_ids': state.invalid_citation_ids,
             'evidence_map': evidence_map,
         }
-
+    sid = request.session_id or str(uuid4())
     try:
-        state = workflow.run(request.query)
+        state = workflow.run(request.query, session_id=sid)
     except HTTPException:
         raise
     except Exception as e:

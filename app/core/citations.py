@@ -9,8 +9,13 @@ from app.schemas.state import CitationRecord
 CITATION_BLOCK_PATTERN = re.compile(r"引用证据[:：]\s*(.*)$", re.DOTALL)
 LIST_CITATION_PATTERN = re.compile(r"-\s*\[([^\[\]\r\n]+)\]")
 GENERIC_BRACKET_PATTERN = re.compile(r"\[([^\[\]\r\n]+)\]")
+CITATION_TAIL_PATTERN = re.compile(r"\n*引用证据[:：]\s*.*$", re.DOTALL)
 
 
+
+# 抽取引用的 chunk_id 列表，支持两种格式：
+# 1. 列表格式：引用证据:\n- [chunk_id1]\n- [chunk_id2]
+# 2. 行内格式：引用证据: chunk_id1, chunk_id2
 def extract_chunk_ids(answer: str) -> list[str]:
     text = (answer or "").strip()
     if not text:
@@ -25,6 +30,7 @@ def extract_chunk_ids(answer: str) -> list[str]:
     return list(dict.fromkeys(cleaned))
 
 
+# 构建可信引用记录列表和无效引用ID列表
 def build_citation_records(
     citation_ids: list[str],
     retrieved_chunks: list[RetrievedChunk],
@@ -58,3 +64,11 @@ def build_evidence_map(retrieved_chunks: list[RetrievedChunk]) -> dict[str, Cita
         )
         for chunk in retrieved_chunks
     }
+
+# 去除引用块，返回纯文本答案
+def strip_citation_block(answer: str) -> str:
+    text = (answer or "").strip()
+    if not text:
+        return ""
+    return CITATION_TAIL_PATTERN.sub("", text).strip()
+

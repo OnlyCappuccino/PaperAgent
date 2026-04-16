@@ -2,7 +2,25 @@ from __future__ import annotations
 
 from app.schemas.documents import RetrievedChunk
 
-
+def rewriter_messages(user_query: str, history_context: str) -> list[dict[str, str]]:
+    return [
+        {
+            'role': 'system',
+            'content': (
+                '你是一个善解人意的科研文献总结助手。'
+                '请根据用户问题和历史会话记录，理解用户的意图并完善用户问题。'
+                '请严格参考历史会话记录，并使用历史会话记录中的信息来完善用户问题。'
+            ),
+        },
+        {
+            'role': 'user',
+            'content': (
+                f'用户问题：{user_query}\n\n'
+                f'历史上下文\n{history_context}\n\n'
+                '请基于提供的历史上下文，重写用户问题。'
+            ),
+        },
+    ]
 def format_context(chunks: list[RetrievedChunk]) -> str:
     if not chunks:
         return '无可用证据片段。'
@@ -37,6 +55,7 @@ def summarizer_messages(user_query: str, chunks: list[RetrievedChunk], rewrite_h
                 f'用户问题：{user_query}\n\n'
                 f'证据片段：\n{format_context(chunks)}\n'
                 f'{hint_text}\n\n'
+                '请基于提供的证据片段，回答用户问题。'
                 '请基于证据作答，并严格使用下面的结尾格式：\n'
                 '引用证据：\n'
                 '- [chunk_id_1]\n'

@@ -17,7 +17,7 @@ if __name__ == '__main__':
 
     setup_logging()
     workflow = ResearchWorkflow()
-    state = workflow.run(args.query)
+    state = workflow.run(args.query, session_id='test_session')
 
     print('\n===== 最终答案 =====\n')
     print(state.draft_answer)

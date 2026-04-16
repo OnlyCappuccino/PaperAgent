@@ -30,6 +30,12 @@ class Settings(BaseSettings):
     rerank_margin_threshold: float = 0.05
     dense_bm25_overlap_threshold: int = 3
     rerank_top1_score_threshold: float = 0.3
+
+    redis_url: str = 'redis://127.0.0.1:6379'
+    session_ttl_seconds: int = 3600
+    memory_max_turns: int = 20
+    history_turns_display: int = 4
+
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:
     return Settings()

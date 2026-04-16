@@ -16,8 +16,8 @@ def gate(retriever_result: RetrievalResult, use_rerank_metrics: bool = True) -> 
     if retriever_result.dense_bm25_overlap < settings.dense_bm25_overlap_threshold:
         return False, f'检索结果过于分散（密集检索和BM25检索的重叠度为{retriever_result.dense_bm25_overlap}），可能包含较多噪声。'
     if use_rerank_metrics:
-        if retriever_result.rerank_margin < settings.rerank_margin_threshold:
-            return False, f'检索结果的相关性较低（top1和top2的分数差距仅{retriever_result.rerank_margin:.4f}），可能无法支持后续分析。'
+        # if retriever_result.rerank_margin < settings.rerank_margin_threshold:
+        #     return False, f'检索结果的相关性较低（top1和top2的分数差距仅{retriever_result.rerank_margin:.4f}），可能无法支持后续分析。'
         if retriever_result.rerank_top1_score < settings.rerank_top1_score_threshold:
             return False, f'检索结果的相关性较低（top1得分为{retriever_result.rerank_top1_score:.4f}），可能无法支持后续分析。'
     return True, '检索结果通过门控检查。'
