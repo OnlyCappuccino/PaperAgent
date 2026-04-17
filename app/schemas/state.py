@@ -56,3 +56,8 @@ class ConversationTurn(BaseModel):
     citations: list[str] = Field(default_factory=list)
     status: str = 'ok'
     timestamp: float
+
+class SessionSummary(BaseModel):
+    summary_text: str = ''
+    updated_at: float = 0.0
+    count: int = 0  # session轮次

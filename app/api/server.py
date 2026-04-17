@@ -5,6 +5,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
 from app.core.citations import build_evidence_map
+from app.core.logging import setup_logging
 from app.workflow.engine import ResearchWorkflow
 from app.workflow.indexing import build_index
 from app.schemas.state import AskRequest, IndexRequest, ResearchState
@@ -14,6 +15,7 @@ workflow : ResearchWorkflow | None = None
 async def lifespan(app: FastAPI):
     global workflow
     # 启动时执行
+    setup_logging()
     print("startup")
     workflow = ResearchWorkflow()
     if not workflow.summarizer.client:

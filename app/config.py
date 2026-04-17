@@ -35,6 +35,13 @@ class Settings(BaseSettings):
     session_ttl_seconds: int = 3600
     memory_max_turns: int = 20
     history_turns_display: int = 4
+    summary_max_turns: int = 10
+
+    log_level: str = 'INFO'
+    log_dir: str = './logs'
+    log_filename: str = 'app.log'
+    log_max_bytes: int = 5 * 1024 * 1024
+    log_backup_count: int = 3
 
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:

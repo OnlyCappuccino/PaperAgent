@@ -2,18 +2,16 @@
 redis短期记忆存储
 """
 
-
 from __future__ import annotations
-
 import json
+import logging
 import time
-
 import redis
-
 from app.config import get_settings
-from app.schemas.state import ConversationTurn
 
+from app.schemas.state import ConversationTurn, SessionSummary
 
+logger = logging.getLogger(__name__)
 
 class RedisMemoryStore:
     def __init__(self) -> None:
@@ -31,6 +29,10 @@ class RedisMemoryStore:
     @staticmethod
     def _meta_key(session_id: str) -> str:
         return f'chat:{session_id}:meta'
+
+    @staticmethod
+    def _summary_key(session_id: str) -> str:
+        return f'chat:{session_id}:summary'
 
     def append_turn(
         self,
@@ -75,7 +77,8 @@ class RedisMemoryStore:
             try:
                 payload = json.loads(item)
                 turns.append(ConversationTurn.model_validate(payload))
-            except Exception:
+            except Exception as e:
+                logger.warning(f'获取对话记录失败: {e}')
                 continue
         return turns
 
@@ -86,7 +89,44 @@ class RedisMemoryStore:
         self.client.delete(
             self._turns_key(session_id),
             self._meta_key(session_id),
+            self._summary_key(session_id),
         )
+
+    def get_session_summary(self, session_id: str) -> SessionSummary:
+        raw = self.client.get(self._summary_key(session_id))
+        if not raw:
+            return SessionSummary()
+        try:
+            payload = json.loads(raw)
+            return SessionSummary.model_validate(payload)
+        except Exception:
+            logger.warning(f'获取会话摘要失败: {raw}')
+            return SessionSummary()
+    
+    def increase_summary_count(self, session_id: str) -> SessionSummary:
+        current = self.get_session_summary(session_id)
+
+        payload = SessionSummary(
+            summary_text=current.summary_text,
+            updated_at=current.updated_at,
+            count=current.count + 1,
+        )
+
+        key = self._summary_key(session_id)
+        self.client.set(key, payload.model_dump_json())
+        self.client.expire(key, self.settings.session_ttl_seconds)
+        return payload
+
+    def set_summary(self, session_id: str, summary_text: str) -> None:
+        payload = SessionSummary(
+            summary_text=summary_text,
+            updated_at=time.time(),
+            count=0,
+        )
+        key = self._summary_key(session_id)
+        self.client.set(key, payload.model_dump_json())
+        self.client.expire(key, self.settings.session_ttl_seconds)
+
 
 
     

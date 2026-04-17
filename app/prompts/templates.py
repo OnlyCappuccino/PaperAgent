@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from app.schemas.documents import RetrievedChunk
+from app.schemas.state import ConversationTurn
 
 def rewriter_messages(user_query: str, history_context: str) -> list[dict[str, str]]:
     return [
@@ -90,3 +91,24 @@ def critic_messages(user_query: str, answer: str, chunks: list[RetrievedChunk]) 
             ),
         },
     ]
+
+def session_summary_messages(existing_summary: str, recent_turns_text: str) -> list[dict[str, str]]:
+    return [
+        {
+            'role': 'system',
+            'content': (
+                '你是一个会话记忆整理助手。'
+                '请根据已有摘要和最新几轮对话，更新一份简洁、稳定的会话摘要。'
+                '只保留对后续检索和问答真正重要的信息。'
+            ),
+        },
+        {
+            'role': 'user',
+            'content': (
+                f'已有摘要:\n{existing_summary}\n\n'
+                f'最近对话:\n{recent_turns_text}\n\n'
+                '请输出更新后的会话摘要。'
+            ),
+        },
+    ]
+

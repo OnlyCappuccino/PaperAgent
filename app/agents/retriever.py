@@ -1,3 +1,5 @@
+import logging
+
 from app.config import get_settings
 from app.schemas.state import RetrievalResult
 from app.schemas.documents import DocumentChunk, RetrievedChunk
@@ -5,7 +7,7 @@ from app.vectorstore.chroma_store import ChromaResearchStore
 from app.vectorstore.reranker import Reranker, rrf_fuse
 from app.vectorstore.BM25_retriever import BM25Retriever
 
-
+logger = logging.getLogger(__name__)
 # 检索结果门控
 def gate(retriever_result: RetrievalResult, use_rerank_metrics: bool = True) -> tuple[bool, str]:
     settings = get_settings()
@@ -56,7 +58,7 @@ class RetrieverAgent:
         if not chunks:
             _, reason = gate(RetrievalResult(), use_rerank_metrics=False)
             return [], reason
-
+        
         self.bm25_retriever = BM25Retriever(chunks=chunks)
         bm25_hits = self.bm25_retriever.search(query=query, k=60)
         dense_hits = self.store.search(query=query, k=60)
@@ -85,7 +87,7 @@ class RetrieverAgent:
             # 使用reranker对RRF融合的结果进行重排序
             reranker_hits = self.reranker.rerank(query=query, hits=rrf_fused_hits)
         except Exception as e:
-            print(f'Reranker failed, fallback to RRF: {e}')
+            logger.warning(f'RRF融合结果重排序失败，回退到 RRF: {e}')
 
         if reranker_hits:
             result_chunks: list[RetrievedChunk] = []
