@@ -96,7 +96,7 @@ python scripts\ask.py --query "请总结这篇论文的贡献点"
 启动：
 
 ```powershell
-uvicorn app.api.server:app --reload --host 127.0.0.1 --port 8000
+uvicorn app.api.server:app --reload --host 127.0.0.1 --port 7090
 ```
 
 健康检查：

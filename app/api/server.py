@@ -1,7 +1,7 @@
 from contextlib import asynccontextmanager
 from uuid import uuid4
 
-from fastapi import FastAPI, HTTPException
+from fastapi import Body, FastAPI, HTTPException, Path
 from pydantic import BaseModel
 
 from app.core.citations import build_evidence_map
@@ -9,6 +9,7 @@ from app.core.logging import setup_logging
 from app.workflow.engine import ResearchWorkflow
 from app.workflow.indexing import build_index
 from app.schemas.state import AskRequest, IndexRequest, ResearchState
+from app.workflow.value import Evaluator
 
 workflow : ResearchWorkflow | None = None
 @asynccontextmanager
@@ -97,3 +98,24 @@ def ask_question(request: AskRequest) -> dict:
 
     status = 'fail' if (not state.retrieved_chunks and state.failure_reason) else 'ok'
     return build_ask_response(state, status=status)
+
+
+@app.get('/get_chunks')
+def get_chunks() -> dict:
+    if not workflow:
+        raise HTTPException(status_code=503, detail='workflow 未初始化')
+    chunks = workflow.retriever.store.get_chunks()
+    return {'chunks': chunks}
+
+@app.get('/system_evaluation')
+def system_evaluation():
+    if not workflow:
+        raise HTTPException(status_code=503, detail='workflow 未初始化')
+    evaluator = Evaluator(workflow=workflow)
+    state = evaluator.evaluate_system()
+    return (
+        f"Hit Rate: {state.hit_rate * 100:.2f}%"
+        f"\nRecall@K: {state.recall_at_k * 100:.2f}%"
+        f"\nMRR@K: {state.mrr_at_k:.2f}"
+        f"\nPrecision@K: {state.precision_at_k * 100:.2f}%"
+    )

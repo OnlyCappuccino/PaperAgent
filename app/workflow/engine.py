@@ -1,5 +1,3 @@
-import time
-
 from app.agents.critic import CriticAgent
 from app.agents.retriever import RetrieverAgent
 from app.agents.rewriter import RewriterAgent
@@ -7,7 +5,6 @@ from app.agents.response_summarizer import SummarizerAgent
 from app.agents.session_summarizer import Session_SummaryAgent
 from app.config import get_settings
 import logging
-from app.core.logging import setup_logging
 from app.core.citations import build_citation_records, extract_chunk_ids, strip_citation_block
 from app.memory.history_context import build_history_context
 from app.memory.redis_memory_store import RedisMemoryStore
@@ -24,6 +21,8 @@ class ResearchWorkflow:
         self.rewriter = RewriterAgent()
         self.summary = Session_SummaryAgent()
         self.template_memory = RedisMemoryStore()
+
+
 
     def run(self, user_query: str, session_id: str) -> ResearchState:
         # 是否是第一次会话轮次，第一次轮次没有历史上下文，不需要重写用户query

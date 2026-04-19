@@ -92,3 +92,27 @@ class ChromaResearchStore:
     
     def all_collections(self) -> list[str]:
         return [collection.name for collection in self.client.list_collections()]
+
+    # 获取所有chunks
+    def get_chunks(self) -> list[DocumentChunk]:
+        chunks: list[DocumentChunk] = []
+        collection_data = self.collection.get(include=['documents', 'metadatas'])
+        documents = collection_data.get('documents') or []
+        metadatas = collection_data.get('metadatas') or []
+        ids = collection_data.get('ids') or []
+
+        for idx, (chunk_id, doc) in enumerate(zip(ids, documents)):
+            metadata = metadatas[idx] if idx < len(metadatas) else {}
+            meta = metadata or {}
+            chunks.append(
+                DocumentChunk(
+                    chunk_id=chunk_id,
+                    source=meta.get('source', ''),
+                    text=doc,
+                    page=meta.get('page'),
+                    chunk_index=meta.get('chunk_index', 0),
+                    doc_name=meta.get('doc_name', ''),
+                    section=meta.get('section', ''),
+                )
+            )
+        return chunks

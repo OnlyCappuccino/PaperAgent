@@ -45,9 +45,9 @@ class AskRequest(BaseModel):
 
 # 索引请求和响应模型
 class IndexRequest(BaseModel):
-    collection: str | None = None
-    clear: bool = False
-    rebuild: bool = False
+    collection: str = Field(default='', description='要索引的集合名称，默认为空字符串')
+    clear: bool = Field(default=False, description='是否清空集合中的现有数据，默认为false,可输入true')
+    rebuild: bool = Field(default=False, description='是否重建集合，默认为false,可输入true')
 
 # 会话轮次模型
 class ConversationTurn(BaseModel):

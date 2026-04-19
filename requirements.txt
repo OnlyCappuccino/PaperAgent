@@ -10,4 +10,8 @@ numpy>=1.26.0
 python-dotenv>=1.0.1
 pytest>=8.3.0
 redis>=5.0.0
+langchain-openai>=0.2.0
+jieba>=0.42.1
+rank-bm25>=0.2.2
+rq>=1.16.2
 

@@ -1,0 +1,252 @@
+[
+  {
+    "id": "ts_001",
+    "query": "CDSE 相比传统先下载整幅卫星影像再做本地计算，采用了什么新的数据获取与处理模式？",
+    "gold_chunk_ids": [
+      "data\\papers\\D. Kovács 等 - 2026 - Copernicus Data Space Ecosystem establishes public cloud processing for earth observation data.pdf::p2::c1"
+    ],
+    "gold_doc_names": [
+      "D. Kovács 等 - 2026 - Copernicus Data Space Ecosystem establishes public cloud processing for earth observation data"
+    ],
+    "difficulty": "easy"
+  },
+  {
+    "id": "ts_002",
+    "query": "CDSE 的数据目录主要通过哪三类 catalog API 接口访问？",
+    "gold_chunk_ids": [
+      "data\\papers\\D. Kovács 等 - 2026 - Copernicus Data Space Ecosystem establishes public cloud processing for earth observation data.pdf::p11::c2",
+      "data\\papers\\D. Kovács 等 - 2026 - Copernicus Data Space Ecosystem establishes public cloud processing for earth observation data.pdf::p12::c0"
+    ],
+    "gold_doc_names": [
+      "D. Kovács 等 - 2026 - Copernicus Data Space Ecosystem establishes public cloud processing for earth observation data"
+    ],
+    "difficulty": "hard"
+  },
+  {
+    "id": "ts_003",
+    "query": "GeoCode-GPT 为了解决地理空间代码生成中的问题，开源了哪三类资源，并基于什么底座模型构建？",
+    "gold_chunk_ids": [
+      "data\\papers\\Hou 等 - 2025 - GeoCode-GPT A large language model for geospatial code generation.pdf::p1::c1"
+    ],
+    "gold_doc_names": [
+      "Hou 等 - 2025 - GeoCode-GPT A large language model for geospatial code generation"
+    ],
+    "difficulty": "easy"
+  },
+  {
+    "id": "ts_004",
+    "query": "GeoCode-GPT 在多选题、代码摘要和代码生成三个任务上，大致带来了什么量级的性能提升？",
+    "gold_chunk_ids": [
+      "data\\papers\\Hou 等 - 2025 - GeoCode-GPT A large language model for geospatial code generation.pdf::p1::c2"
+    ],
+    "gold_doc_names": [
+      "Hou 等 - 2025 - GeoCode-GPT A large language model for geospatial code generation"
+    ],
+    "difficulty": "medium"
+  },
+  {
+    "id": "ts_005",
+    "query": "语义 EO 数据立方框架的三大技术基础分别是什么？",
+    "gold_chunk_ids": [
+      "data\\papers\\Kröber 等 - 2025 - On-demand, semantic EO data cubes – knowledge-based, semantic querying of multimodal data for mesosc.pdf::p1::c2"
+    ],
+    "gold_doc_names": [
+      "Kröber 等 - 2025 - On-demand, semantic EO data cubes – knowledge-based, semantic querying of multimodal data for mesosc"
+    ],
+    "difficulty": "medium"
+  },
+  {
+    "id": "ts_006",
+    "query": "这个语义查询框架给终端用户和领域专家带来了哪些实际好处？文中又用什么应用案例来展示这些好处？",
+    "gold_chunk_ids": [
+      "data\\papers\\Kröber 等 - 2025 - On-demand, semantic EO data cubes – knowledge-based, semantic querying of multimodal data for mesosc.pdf::p1::c3"
+    ],
+    "gold_doc_names": [
+      "Kröber 等 - 2025 - On-demand, semantic EO data cubes – knowledge-based, semantic querying of multimodal data for mesosc"
+    ],
+    "difficulty": "medium"
+  },
+  {
+    "id": "ts_007",
+    "query": "识别锂辉石的 remote-sensing index cube 由哪些传感器/波段指标组合而成？",
+    "gold_chunk_ids": [
+      "data\\papers\\Li 等 - 2025 - Identification of spodumene using a remote-sensing index cube from SDGSAT-1 and other satellites.pdf::p2::c1"
+    ],
+    "gold_doc_names": [
+      "Li 等 - 2025 - Identification of spodumene using a remote-sensing index cube from SDGSAT-1 and other satellites"
+    ],
+    "difficulty": "medium"
+  },
+  {
+    "id": "ts_008",
+    "query": "文中用于锂辉石识别的混合深度学习模型是什么结构？SDGSAT-1 的 TIR 数据为什么特别有效？",
+    "gold_chunk_ids": [
+      "data\\papers\\Li 等 - 2025 - Identification of spodumene using a remote-sensing index cube from SDGSAT-1 and other satellites.pdf::p2::c2"
+    ],
+    "gold_doc_names": [
+      "Li 等 - 2025 - Identification of spodumene using a remote-sensing index cube from SDGSAT-1 and other satellites"
+    ],
+    "difficulty": "medium"
+  },
+  {
+    "id": "ts_009",
+    "query": "GeoGraphRAG 是如何把外部图知识注入 LLM，并最终生成什么结果的？",
+    "gold_chunk_ids": [
+      "data\\papers\\Liang 等 - 2025 - GeoGraphRAG A graph-based retrieval-augmented generation approach for empowering large language mod.pdf::p1::c1",
+      "data\\papers\\Liang 等 - 2025 - GeoGraphRAG A graph-based retrieval-augmented generation approach for empowering large language mod.pdf::p1::c2"
+    ],
+    "gold_doc_names": [
+      "Liang 等 - 2025 - GeoGraphRAG A graph-based retrieval-augmented generation approach for empowering large language mod"
+    ],
+    "difficulty": "hard"
+  },
+  {
+    "id": "ts_010",
+    "query": "论文如何概括 GeoGraphRAG 的主要价值和研究定位？",
+    "gold_chunk_ids": [
+      "data\\papers\\Liang 等 - 2025 - GeoGraphRAG A graph-based retrieval-augmented generation approach for empowering large language mod.pdf::p1::c2",
+      "data\\papers\\Liang 等 - 2025 - GeoGraphRAG A graph-based retrieval-augmented generation approach for empowering large language mod.pdf::p1::c3"
+    ],
+    "gold_doc_names": [
+      "Liang 等 - 2025 - GeoGraphRAG A graph-based retrieval-augmented generation approach for empowering large language mod"
+    ],
+    "difficulty": "hard"
+  },
+  {
+    "id": "ts_011",
+    "query": "RTGDC 是如何实现地理空间数据立方体的实时摄取与处理的？",
+    "gold_chunk_ids": [
+      "data\\papers\\Liu 等 - 2024 - RTGDC a real-time ingestion and processing approach in geospatial data cube for digital twin of ear.pdf::p2::c1",
+      "data\\papers\\Liu 等 - 2024 - RTGDC a real-time ingestion and processing approach in geospatial data cube for digital twin of ear.pdf::p2::c2"
+    ],
+    "gold_doc_names": [
+      "Liu 等 - 2024 - RTGDC a real-time ingestion and processing approach in geospatial data cube for digital twin of ear"
+    ],
+    "difficulty": "medium"
+  },
+  {
+    "id": "ts_012",
+    "query": "RTGDC 论文总结的三项主要贡献是什么？",
+    "gold_chunk_ids": [
+      "data\\papers\\Liu 等 - 2024 - RTGDC a real-time ingestion and processing approach in geospatial data cube for digital twin of ear.pdf::p3::c2"
+    ],
+    "gold_doc_names": [
+      "Liu 等 - 2024 - RTGDC a real-time ingestion and processing approach in geospatial data cube for digital twin of ear"
+    ],
+    "difficulty": "medium"
+  },
+  {
+    "id": "ts_013",
+    "query": "这个 autonomous GIS agent 依靠哪些机制来自主选择数据源并完成取数？",
+    "gold_chunk_ids": [
+      "data\\papers\\Ning 等 - 2025 - An autonomous GIS agent framework for geospatial data retrieval.pdf::p2::c0",
+      "data\\papers\\Ning 等 - 2025 - An autonomous GIS agent framework for geospatial data retrieval.pdf::p2::c1"
+    ],
+    "gold_doc_names": [
+      "Ning 等 - 2025 - An autonomous GIS agent framework for geospatial data retrieval"
+    ],
+    "difficulty": "medium"
+  },
+  {
+    "id": "ts_014",
+    "query": "实验中这个 GIS agent 能从哪些类型的数据源取数？至少包括哪些典型例子？",
+    "gold_chunk_ids": [
+      "data\\papers\\Ning 等 - 2025 - An autonomous GIS agent framework for geospatial data retrieval.pdf::p2::c1",
+      "data\\papers\\Ning 等 - 2025 - An autonomous GIS agent framework for geospatial data retrieval.pdf::p2::c2"
+    ],
+    "gold_doc_names": [
+      "Ning 等 - 2025 - An autonomous GIS agent framework for geospatial data retrieval"
+    ],
+    "difficulty": "easy"
+  },
+  {
+    "id": "ts_015",
+    "query": "EarthGPT 为了统一多传感器遥感理解，提出了哪三个核心设计？",
+    "gold_chunk_ids": [
+      "data\\papers\\Zhang 等 - 2024 - EarthGPT A Universal Multimodal Large Language Model for Multisensor Image Comprehension in Remote.pdf::p1::c1"
+    ],
+    "gold_doc_names": [
+      "Zhang 等 - 2024 - EarthGPT A Universal Multimodal Large Language Model for Multisensor Image Comprehension in Remote"
+    ],
+    "difficulty": "medium"
+  },
+  {
+    "id": "ts_016",
+    "query": "MMRS-1M 数据集的规模有多大，覆盖了哪些传感器类型？",
+    "gold_chunk_ids": [
+      "data\\papers\\Zhang 等 - 2024 - EarthGPT A Universal Multimodal Large Language Model for Multisensor Image Comprehension in Remote.pdf::p1::c2"
+    ],
+    "gold_doc_names": [
+      "Zhang 等 - 2024 - EarthGPT A Universal Multimodal Large Language Model for Multisensor Image Comprehension in Remote"
+    ],
+    "difficulty": "easy"
+  },
+  {
+    "id": "ts_017",
+    "query": "VectorLLM 与以往建筑轮廓提取方法相比，核心建模方式有什么不同？整体架构由什么组成？",
+    "gold_chunk_ids": [
+      "data\\papers\\Zhang 等 - 2025 - VectorLLM Human-like Extraction of Structured Building Contours vis Multimodal LLMs.pdf::p1::c2"
+    ],
+    "gold_doc_names": [
+      "Zhang 等 - 2025 - VectorLLM Human-like Extraction of Structured Building Contours vis Multimodal LLMs"
+    ],
+    "difficulty": "medium"
+  },
+  {
+    "id": "ts_018",
+    "query": "VectorLLM 展示了哪些泛化能力和使用条件，例如 zero-shot 能力或是否依赖后处理？",
+    "gold_chunk_ids": [
+      "data\\papers\\Zhang 等 - 2025 - VectorLLM Human-like Extraction of Structured Building Contours vis Multimodal LLMs.pdf::p1::c2",
+      "data\\papers\\Zhang 等 - 2025 - VectorLLM Human-like Extraction of Structured Building Contours vis Multimodal LLMs.pdf::p2::c0"
+    ],
+    "gold_doc_names": [
+      "Zhang 等 - 2025 - VectorLLM Human-like Extraction of Structured Building Contours vis Multimodal LLMs"
+    ],
+    "difficulty": "hard"
+  },
+  {
+    "id": "ts_019",
+    "query": "VGHP 为了解决 RSVQA 中的语言先验偏置和多尺度感知问题，引入了哪两个关键模块？",
+    "gold_chunk_ids": [
+      "data\\papers\\Zhang 等 - 2025 - Visual-Grounded Hierarchical Perception for Remote Sensing Visual Question Answering.pdf::p1::c1"
+    ],
+    "gold_doc_names": [
+      "Zhang 等 - 2025 - Visual-Grounded Hierarchical Perception for Remote Sensing Visual Question Answering"
+    ],
+    "difficulty": "medium"
+  },
+  {
+    "id": "ts_020",
+    "query": "VGHP 的实验结论如何？它在什么基准或场景上验证了效果？",
+    "gold_chunk_ids": [
+      "data\\papers\\Zhang 等 - 2025 - Visual-Grounded Hierarchical Perception for Remote Sensing Visual Question Answering.pdf::p1::c2",
+      "data\\papers\\Zhang 等 - 2025 - Visual-Grounded Hierarchical Perception for Remote Sensing Visual Question Answering.pdf::p2::c4"
+    ],
+    "gold_doc_names": [
+      "Zhang 等 - 2025 - Visual-Grounded Hierarchical Perception for Remote Sensing Visual Question Answering"
+    ],
+    "difficulty": "medium"
+  },
+  {
+    "id": "ts_021",
+    "query": "这篇综述从哪两个维度梳理深度学习驱动的遥感变化检测演变？变化特征表达又呈现哪四个趋势？",
+    "gold_chunk_ids": [
+      "data\\papers\\张继贤 等 - 2025 - 遥感智能变化检测的深度学习方法：演变与发展趋势.pdf::p2::c1"
+    ],
+    "gold_doc_names": [
+      "张继贤 等 - 2025 - 遥感智能变化检测的深度学习方法：演变与发展趋势"
+    ],
+    "difficulty": "medium"
+  },
+  {
+    "id": "ts_022",
+    "query": "文章总结的网络学习演进趋势和未来 3 个发展方向分别是什么？",
+    "gold_chunk_ids": [
+      "data\\papers\\张继贤 等 - 2025 - 遥感智能变化检测的深度学习方法：演变与发展趋势.pdf::p1::c1"
+    ],
+    "gold_doc_names": [
+      "张继贤 等 - 2025 - 遥感智能变化检测的深度学习方法：演变与发展趋势"
+    ],
+    "difficulty": "easy"
+  }
+]
