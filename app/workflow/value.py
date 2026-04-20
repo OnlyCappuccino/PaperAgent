@@ -82,14 +82,17 @@ class Evaluator:
                 break
         return hit_rate, recall, mrr, precision
 
-    def evaluate(self, path: str, k: int = 5) -> EvalResult:
+    def evaluate(self, path: str, k: int = 5, limit: int | None = None, progress_cb=None) -> EvalResult:
         samples = load_eval_samples(path)
+        if limit is not None:
+            samples = samples[:limit]
         total_hit = 0.0
         total_recall = 0.0
         total_mrr = 0.0
         total_precision = 0.0
+        n = len(samples)
 
-        for idx, sample in enumerate(samples):
+        for idx, sample in enumerate(samples, start=1):
             query = str(sample["query"])
             gold_ids = list(sample["gold_chunk_ids"])
             sample_id = sample.get("id", f"row_{idx}")
@@ -108,7 +111,8 @@ class Evaluator:
             total_mrr += mrr
             total_precision += precision
 
-        n = len(samples)
+            if progress_cb:
+                progress_cb(idx, n)
         return EvalResult(
             hit_rate=round(total_hit / n, 4),
             recall_at_k=round(total_recall / n, 4),

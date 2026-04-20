@@ -68,5 +68,47 @@ services:
       timeout: 3s
       retries: 5
 
+  worker:
+    image: local-research-api:latest
+    container_name: local-research-worker
+    command: python -m scripts.run_eval_worker
+    depends_on:
+      redis:
+        condition: service_healthy
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      llm_base_url: ${DOCKER_LLM_BASE_URL:-http://host.docker.internal:8080/v1}
+      llm_api_key: ${LLM_API_KEY:-EMPTY}
+      llm_model_name: ${LLM_MODEL_NAME:-qwen2.5:7b-instruct}
+      embedding_base_url: ${DOCKER_EMBEDDING_BASE_URL:-http://host.docker.internal:8080/v1}
+      embedding_api_key: ${EMBEDDING_API_KEY:-EMPTY}
+      embedding_model_name: ${EMBEDDING_MODEL_NAME:-bge-m3-FP16.gguf}
+      reranker_model: ${RERANKER_MODEL:-BAAI/bge-reranker-v2-m3}
+      chroma_collection: ${CHROMA_COLLECTION:-research_chunks}
+      chroma_dir: /app/data/chroma
+      docs_dir: /app/data/papers
+      top_k: ${TOP_K:-5}
+      chunk_size: ${CHUNK_SIZE:-800}
+      chunk_overlap: ${CHUNK_OVERLAP:-120}
+      max_rewrite_rounds: ${MAX_REWRITE_ROUNDS:-2}
+      request_timeout: ${REQUEST_TIMEOUT:-120}
+      bm25_score_threshold: ${BM25_SCORE_THRESHOLD:-0.1}
+      min_retrieval_hits_threshold: ${MIN_RETRIEVAL_HITS_THRESHOLD:-3}
+      dense_bm25_overlap_threshold: ${DENSE_BM25_OVERLAP_THRESHOLD:-0}
+      rerank_margin_threshold: ${RERANK_MARGIN_THRESHOLD:-0.05}
+      rerank_top1_score_threshold: ${RERANK_TOP1_SCORE_THRESHOLD:-0.3}
+      redis_url: redis://redis:6379/0
+      session_ttl_seconds: ${SESSION_TTL_SECONDS:-60}
+      memory_max_turns: ${MEMORY_MAX_TURNS:-20}
+      history_turns_display: ${HISTORY_TURNS_DISPLAY:-4}
+      summary_max_turns: ${SUMMARY_MAX_TURNS:-10}
+      log_level: ${LOG_LEVEL:-INFO}
+      log_dir: /app/logs
+      log_filename: ${LOG_FILENAME:-app.log}
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+
 volumes:
   redis_data:

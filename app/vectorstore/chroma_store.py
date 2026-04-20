@@ -40,8 +40,12 @@ class ChromaResearchStore:
         )
 
     def search(self, query: str, k: int = 60) -> list[RetrievedChunk]:
+        query_embedding = embed_query(query)
+        if not query_embedding:
+            raise ValueError("query embedding is empty")
+
         result = self.collection.query(
-            query_embeddings=[embed_query(query)],
+            query_embeddings=[query_embedding],
             n_results=k,
             include=['documents', 'metadatas', 'distances'],
         )

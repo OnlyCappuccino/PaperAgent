@@ -1,4 +1,5 @@
 from contextlib import asynccontextmanager
+import logging
 from uuid import uuid4
 
 from fastapi import Body, FastAPI, HTTPException, Path
@@ -8,10 +9,12 @@ from app.core.citations import build_evidence_map
 from app.core.logging import setup_logging
 from app.workflow.engine import ResearchWorkflow
 from app.workflow.indexing import build_index
-from app.schemas.state import AskRequest, IndexRequest, ResearchState
+from app.schemas.state import AskRequest, EvalTaskRequest, IndexRequest, ResearchState
+from app.workflow.task_worker import TaskWorker
 from app.workflow.value import Evaluator
 
 workflow : ResearchWorkflow | None = None
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     global workflow
@@ -107,15 +110,29 @@ def get_chunks() -> dict:
     chunks = workflow.retriever.store.get_chunks()
     return {'chunks': chunks}
 
-@app.get('/system_evaluation')
-def system_evaluation():
-    if not workflow:
-        raise HTTPException(status_code=503, detail='workflow 未初始化')
-    evaluator = Evaluator(workflow=workflow)
-    state = evaluator.evaluate_system()
-    return (
-        f"Hit Rate: {state.hit_rate * 100:.2f}%"
-        f"\nRecall@K: {state.recall_at_k * 100:.2f}%"
-        f"\nMRR@K: {state.mrr_at_k:.2f}"
-        f"\nPrecision@K: {state.precision_at_k * 100:.2f}%"
-    )
+
+@app.post("/system_evaluation/tasks")
+def create_eval_task(req: EvalTaskRequest):
+    try:
+        task_worker = TaskWorker()
+        task_id = task_worker.enqueue_eval_task(path=req.path, k=req.k, limit=req.limit)
+        return {"task_id": task_id, "status": "queued"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="redis连接失败")
+        
+
+
+
+@app.get("/system_evaluation/tasks/{task_id}")
+def get_eval_task(task_id: str):
+    try:
+        task_worker = TaskWorker()
+        task_data = task_worker.get_eval_task(task_id)
+        if task_data["status"] == "not_found":
+            raise HTTPException(status_code=404, detail="评测任务未找到")
+        return task_data
+    except HTTPException:
+        raise
+    except Exception as e:
+
+        raise HTTPException(status_code=500, detail="redis连接失败")

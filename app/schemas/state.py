@@ -61,3 +61,10 @@ class SessionSummary(BaseModel):
     summary_text: str = ''
     updated_at: float = 0.0
     count: int = 0  # session轮次
+
+
+# 评测任务请求模型
+class EvalTaskRequest(BaseModel):
+    path: str | None = Field(default=None, description='评测数据集路径')
+    k: int = Field(default=5, description='top k')
+    limit: int | None = Field(default=None, description='限制评测的样本数量')
